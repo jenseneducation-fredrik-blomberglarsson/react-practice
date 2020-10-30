@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
 
+// using CSS modules, for importing CSS modules with react-scripts higher version than 2. -> add modules "person.modules.css". Then you don't have to do the eject steps.
+import classes from './App.css';
 import Person from './Person/Person';
 
 
@@ -44,21 +45,10 @@ class App extends Component {
   }
 
   render() {
-    
-/*     const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      ':hover': { // radium (npm install --save radium)
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
-    }; */
 
     let persons = null;
+
+    let btnClass = '';
 
     if (this.state.showPersons) {
       persons = (
@@ -74,26 +64,23 @@ class App extends Component {
           })}
         </div>
       );
-/*       style.backgroundColor = 'red'; // dynamic styling
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      } */
+
+      btnClass = classes.red;
     }
 
-    const classes = [];
+    const assignedClasses = [];
     if (this.state.persons.length <= 2) {
-      classes.push('red') // classes = ['red']
+      assignedClasses.push(classes.red) // classes = ['red']
     }
     if (this.state.persons.length <= 1) {
-      classes.push('bold'); // classes = ['red', 'bold']
+      assignedClasses.push(classes.bold); // classes = ['red', 'bold']
     }
 
     return ( // JSX, looks like HTML but JS in the end. Gets compiled to code underneath (greyed out).
-      <div className="App">
+      <div className={classes.App}>
         <h1>Hi, React App Test</h1>
-        <p className={classes.join(' ')}>This is really working!</p>
-        <button onClick={this.togglePersonsHandler}>
+        <p className={assignedClasses.join(' ')}>This is really working!</p>
+        <button className={btnClass} onClick={this.togglePersonsHandler}>
             Toggle persons
           </button>
         {persons}
