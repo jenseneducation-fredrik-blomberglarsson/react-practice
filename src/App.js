@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
 import './App.css';
+import styled from 'styled-components';
+
 import Person from './Person/Person';
-import Radium, { StyleRoot } from 'radium';
+
+// write as regular CSS
+const StyledButton = styled.button`
+  background-color: ${props => props.alt ? 'red' : 'green'};
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
+    color: black;
+  }
+`;
 
 class App extends Component {
   state = {
@@ -43,7 +59,7 @@ class App extends Component {
   }
 
   render() {
-    const style = { // Inline styles, Camel case
+    const style = {
       backgroundColor: 'green',
       color: 'white',
       font: 'inherit',
@@ -72,11 +88,11 @@ class App extends Component {
           })}
         </div>
       );
-      style.backgroundColor = 'red'; // dynamic styling
+/*       style.backgroundColor = 'red'; // dynamic styling
       style[':hover'] = {
         backgroundColor: 'salmon',
         color: 'black'
-      }
+      } */
     }
 
     const classes = [];
@@ -87,24 +103,21 @@ class App extends Component {
       classes.push('bold'); // classes = ['red', 'bold']
     }
 
-    // Wrap root component with the styleroot component provided by radium to access advanced features ( like media queries)
     return ( // JSX, looks like HTML but JS in the end. Gets compiled to code underneath (greyed out).
-      <StyleRoot>
       <div className="App">
         <h1>Hi, React App Test</h1>
         <p className={classes.join(' ')}>This is really working!</p>
-        <button
-          style={style}
-          onClick={this.togglePersonsHandler}>Toggle persons</button>
+        <StyledButton alt={this.state.showPersons} onClick={this.togglePersonsHandler}>
+            Toggle persons
+          </StyledButton>
         {persons}
       </div>
-      </StyleRoot>
     );
     // return React.createElement('div', { className: 'App' }, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default Radium(App);
+export default App;
 
 
 // FUNCTIONAL COMPONENT WITH REACT HOOKS EXAMPLE
