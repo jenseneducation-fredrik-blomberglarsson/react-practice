@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import person from './Person/Person';
 import Person from './Person/Person';
+import Radium, { StyleRoot } from 'radium';
 
 class App extends Component {
   state = {
@@ -44,11 +44,16 @@ class App extends Component {
 
   render() {
     const style = { // Inline styles, Camel case
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': { // radium (npm install --save radium)
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 
     let persons = null;
@@ -66,25 +71,40 @@ class App extends Component {
             />
           })}
         </div>
-      )
+      );
+      style.backgroundColor = 'red'; // dynamic styling
+      style[':hover'] = {
+        backgroundColor: 'salmon',
+        color: 'black'
+      }
     }
 
-    return (
-      // JSX, looks like HTML but JS in the end. Gets compiled to code underneath (greyed out).
+    const classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push('red') // classes = ['red']
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push('bold'); // classes = ['red', 'bold']
+    }
+
+    // Wrap root component with the styleroot component provided by radium to access advanced features ( like media queries)
+    return ( // JSX, looks like HTML but JS in the end. Gets compiled to code underneath (greyed out).
+      <StyleRoot>
       <div className="App">
         <h1>Hi, React App Test</h1>
-        <p>This is really working!</p>
+        <p className={classes.join(' ')}>This is really working!</p>
         <button
           style={style}
           onClick={this.togglePersonsHandler}>Toggle persons</button>
         {persons}
       </div>
+      </StyleRoot>
     );
     // return React.createElement('div', { className: 'App' }, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default App;
+export default Radium(App);
 
 
 // FUNCTIONAL COMPONENT WITH REACT HOOKS EXAMPLE
