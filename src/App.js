@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // using CSS modules, for importing CSS modules with react-scripts higher version than 2. -> add modules "person.modules.css". Then you don't have to do the eject steps.
 import classes from './App.css';
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 
 
 class App extends Component {
@@ -15,9 +16,9 @@ class App extends Component {
     showPersons: false
   }
 
-  nameChangedHandler = (event, id) => {
+  nameChangedHandler = (event, id) => { // Using chrome debugger tools with source maps which are generated automatically, is a powerful feature for detecting logical errors. 
     const personIndex = this.state.persons.findIndex(p => {
-      return p.id === id;
+      return p.id === id; 
     });
 
     const person = {
@@ -54,13 +55,14 @@ class App extends Component {
       persons = (
         <div>
           {this.state.persons.map((person, index) => {
-            return <Person
+            return <ErrorBoundary key={person.id}> {/* key always have to be on the outer element in a map method because that's the element we replicate */}
+            <Person
             click={() => this.deletePersonHandler(index)}
             name={person.name} 
             age={person.age} 
-            key={person.id}
             changed={(event) => this.nameChangedHandler(event, person.id)}
             />
+            </ErrorBoundary>
           })}
         </div>
       );
