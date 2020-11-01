@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 
 // using CSS modules, for importing CSS modules with react-scripts higher version than 2. -> add modules "person.modules.css". Then you don't have to do the eject steps.
 import classes from './App.css';
-import Person from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
+import PersonList from '../components/PersonList/PersonList';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 
+// The idea behind container is that it only manages the states and manipulates the state.
 class App extends Component {
   state = {
     persons: [
@@ -49,42 +50,20 @@ class App extends Component {
 
     let persons = null;
 
-    let btnClass = '';
-
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <ErrorBoundary key={person.id}> {/* key always have to be on the outer element in a map method because that's the element we replicate */}
-            <Person
-            click={() => this.deletePersonHandler(index)}
-            name={person.name} 
-            age={person.age} 
-            changed={(event) => this.nameChangedHandler(event, person.id)}
-            />
-            </ErrorBoundary>
-          })}
-        </div>
-      );
+      persons = <PersonList 
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangedHandler}
+          />;
 
-      btnClass = classes.red;
-    }
-
-    const assignedClasses = [];
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push(classes.red) // classes = ['red']
-    }
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push(classes.bold); // classes = ['red', 'bold']
     }
 
     return ( // JSX, looks like HTML but JS in the end. Gets compiled to code underneath (greyed out).
       <div className={classes.App}>
-        <h1>Hi, React App Test</h1>
-        <p className={assignedClasses.join(' ')}>This is really working!</p>
-        <button className={btnClass} onClick={this.togglePersonsHandler}>
-            Toggle persons
-          </button>
+        <Cockpit showPersons={this.state.showPersons}
+        persons={this.state.persons}
+        clicked={this.togglePersonsHandler}/>
         {persons}
       </div>
     );
